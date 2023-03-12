@@ -11,7 +11,7 @@
 #define LED_FUNCTION 0x30
 
 #define MASK(x) (1 << (x))
-volatile uint32_t led_control = 0;
+volatile uint8_t led_control = 0;
 
 enum color_t {
 	RED_LED = 18,   //PortB Pin 18 
@@ -53,6 +53,8 @@ void initUART2(uint32_t baud_rate) {
 	SIM->SCGC4 |= SIM_SCGC4_UART2_MASK;
 	SIM->SCGC5 |= SIM_SCGC5_PORTE_MASK;
 	
+	SIM->SOPT2 |= SIM_SOPT2_UART0SRC(1);
+	
 	//Connect UART pins for PTE22 PTE23
 	PORTE->PCR[UART_TX_PORTE22] &= ~PORT_PCR_MUX_MASK; //Clear the bits of the current mux operation
 	PORTE->PCR[UART_TX_PORTE22] |= PORT_PCR_MUX(4); //Turn on
@@ -74,29 +76,17 @@ void initUART2(uint32_t baud_rate) {
 	UART2->S2 = 0;
 	UART2->C3 = 0;
 	
+	//Enable transmitter and receiver
+	UART2->C2 |= UART_C2_RE_MASK;
+	
 	NVIC_SetPriority(UART2_IRQn,128);
 	NVIC_ClearPendingIRQ(UART2_IRQn);
 	//Enable the Interrupt
 	NVIC_EnableIRQ(UART2_IRQn);
 	
-	//Enable Tx and Rx and TIE for (Tx Interrupt) and RIE (Rx Interrupt)
-	UART2->C2 |= ((UART_C2_TIE_MASK) | (UART0_C2_RIE_MASK));
-	UART2->C2 |= UART_C2_RIE_MASK;
+	//Enable TIE for (Tx Interrupt) and RIE (Rx Interrupt)
+	UART2->C2 |= UART0_C2_RIE_MASK;
 	
-	//((UART_C2_TE_MASK) | (UART_C2_RE_MASK));
-}
-
-/*UART2 Tranmit Poll*/
-void UART2_Transmit_Poll(uint8_t data) {
-	while(!(UART2->S1 & UART_S1_TDRE_MASK));
-	UART2->D = data;  //Data register is empty, it will start to shift the data out pollling approach
-}
-
-/*UART2 Receive Poll */
-uint8_t UART2_Receive_Roll(void) {
-	//Wait until receive data register is full
-	while(!UART2->S1 & UART_S1_RDRF_MASK); //If not full then wait (Polling approach)
-	return (UART2->D);
 }
 
 /* Delay routine */
@@ -107,70 +97,53 @@ static void delay(volatile uint32_t nof) {
   }
 }
 
-static void Led_control(enum color_t color) {
+static void Led_control_On(enum color_t color) {
 	if(color == BLUE_LED) {
 		PTD->PDOR &= ~MASK(color);  //Turns led on
-		delay(0x200000);
-		PTD->PDOR |= MASK(color);
 	} else {
 		PTB->PDOR &= ~MASK(color);  //Turns led on
-		delay(0x200000);
-		PTB->PDOR |= MASK(color);
 	}
-	  delay(0x200000);
 }
 
-void UART2_IRQHandler(void) {
+static void Led_control_Off(enum color_t color) {
+	if(color == BLUE_LED) {
+		PTD->PDOR |= MASK(color); //Turns led off
+	} else {
+		PTB->PDOR |= MASK(color); //Turns led off
+	}
+}
+
+void UART2_IRQHandler() {
 	NVIC_ClearPendingIRQ(UART2_IRQn);
-	if(UART2->S1 & UART_S1_TDRE_MASK) {
-		//can send another character
-		UART2->D = 0x069;
-	} else {
-		//Disable tx
-		UART2->C2 &= ~UART_C2_TIE_MASK;
-	}
-}
-
-void UART2_IRQHandlerReceiver(void) {
+	
+	//Receiver Interrupt Handler
 	if(UART2->S1 & UART_S1_RDRF_MASK) {
-		
-	} else {
+		UART2-> C2 &= ~UART_C2_TIE_MASK;
+		led_control = UART2->D;		
 	}
 }
 
 /*MAIN function*/
 int main(void) {
-	uint8_t rx_data = 0x69;
 	
 	SystemCoreClockUpdate();
 	InitGPIO();
 	initUART2(BAUD_RATE);
 	
-	//offRGB();
-	
-	//Connect to pin 22 PTE22 and any gnd
 	while(1) {
-		/*Rx and Tx*/
-		
-//		if(led_control == 1) {
-//			Led_control(RED_LED);
-//		} else if(led_control == 0){
-//			Led_control(GREEN_LED);
-//		}
-		
-		//Led_control(RED_LED);
-		
-//		UART2_Transmit_Poll(0x69);
-//		delay(0x80000);
-//	}
 	
-	//uint8_t testData = UART2_Receive_Roll();
-	
-	//Led_control(BLUE_LED);
-	if (led_control == 0) {
-		Led_control(RED_LED);
+		if (led_control == 0x31) {
+			Led_control_On(RED_LED);
+		} else if (led_control == 0x30) {
+			Led_control_Off(RED_LED);
+		} else if (led_control == 0x33) {
+			Led_control_On(GREEN_LED);
+		} else if (led_control == 0x32) {
+			Led_control_Off(GREEN_LED);
+		} else if (led_control == 0x35) {
+			Led_control_On(BLUE_LED);
+		} else if (led_control == 0x34) {
+			Led_control_Off(BLUE_LED);
+		}
 	}
 }
-}
-
-
