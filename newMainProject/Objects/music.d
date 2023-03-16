@@ -1,0 +1,13 @@
+.\objects\music.o: music.c
+.\objects\music.o: C:\Users\ajayshanker\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include\MKL25Z4.h
+.\objects\music.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\music.o: C:\Users\ajayshanker\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\core_cm0plus.h
+.\objects\music.o: C:\Users\ajayshanker\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_version.h
+.\objects\music.o: C:\Users\ajayshanker\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_compiler.h
+.\objects\music.o: C:\Users\ajayshanker\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_armcc.h
+.\objects\music.o: .\RTE\Device\MKL25Z128xxx4\system_MKL25Z4.h
+.\objects\music.o: music.h
+.\objects\music.o: constants.h
+.\objects\music.o: C:\Users\ajayshanker\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include\MKL25Z4.h
+.\objects\music.o: init.h
+.\objects\music.o: C:\Users\ajayshanker\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include\MKL25Z4.h
