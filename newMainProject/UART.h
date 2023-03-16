@@ -3,13 +3,6 @@
 #include  CMSIS_device_header
 #include "cmsis_os2.h"
 
-#define UART_HEADER
-
-#define BAUD_RATE 9600
-#define UART_TX_PORTE22 22 
-#define UART_RX_PORTE23 23
-#define UART2_INT_PRIO 128
-
 extern volatile uint8_t led_control;
 
 extern enum color_t {
