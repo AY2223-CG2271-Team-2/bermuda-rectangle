@@ -23,6 +23,9 @@ void app_main(void *argument) {
 int main(void) {
   // System Initialization
   SystemCoreClockUpdate();
+	InitGPIO();
+  initUART2(BAUD_RATE);
+  initPWM();
   // ...
 
   osKernelInitialize();               // Initialize CMSIS-RTOS
@@ -31,10 +34,7 @@ int main(void) {
                                       //  for (;;) {}
 
   // System initialization
-  SystemCoreClockUpdate();
-  InitGPIO();
-  initUART2(BAUD_RATE);
-  initPWM();
+  
 
   TPM0_C1V = 0x0EA6;
   TPM0_C0V = 0;
@@ -76,7 +76,12 @@ int main(void) {
       TPM0_C0V = 0;
       TPM0_C3V = 0x0EA6;
       TPM0_C2V = 0;
-    } else if (led_control == 0x30) {
+    } else if (led_control == STOP_MOVE) {
+			Led_control_Off(RED_LED);
+			TPM0_C1V = 0;
+      TPM0_C0V = 0;
+      TPM0_C3V = 0;
+      TPM0_C2V = 0;
     } else if (led_control == 0x33) {
     } else if (led_control == 0x32) {
     } else if (led_control == 0x35) {
