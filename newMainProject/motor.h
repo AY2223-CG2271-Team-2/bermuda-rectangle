@@ -1,0 +1,9 @@
+void moveforward();
+void movestop();
+void movebackward();
+void moveright();
+void moveleft();
+void moveforwardright();
+void moveforwardleft();
+void movebackwardright();
+void movebackwardleft();

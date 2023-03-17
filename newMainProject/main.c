@@ -10,6 +10,7 @@
 #include "data_packet.h"
 #include "init.h"
 #include "music.h"
+#include "motor.h"
 
 /*----------------------------------------------------------------------------
  * Application main thread
@@ -36,57 +37,39 @@ int main(void) {
   // System initialization
   
 
-  TPM0_C1V = 0x0EA6;
-  TPM0_C0V = 0;
-  TPM0_C3V = 0x0EA6;
-  TPM0_C2V = 0;
-
-  delay_mult100(10000);
-
-  TPM0_C0V = 0;
-  TPM0_C1V = 0;
-  TPM0_C2V = 0;
-  TPM0_C3V = 0;
-
   // Speaker
   TPM1_C0V = 3750;
 
   while (1) {
-    playStarWars();
-
-    //		if (led_control == 0x31) {
-    //			Led_control_On(RED_LED);
-    //		} else if (led_control == 0x30) {
-    //			Led_control_Off(RED_LED);
-    //		} else if (led_control == 0x33) {
-    //			Led_control_On(GREEN_LED);
-    //		} else if (led_control == 0x32) {
-    //			Led_control_Off(GREEN_LED);
-    //		} else if (led_control == 0x35) {
-    //			Led_control_On(BLUE_LED);
-    //		} else if (led_control == 0x34) {
-    //			Led_control_Off(BLUE_LED);
-    //		}
+		
 
     // TODO: change led_contorl function name
-
     if (led_control == FORWARD_MOVE) {
       Led_control_On(RED_LED);
-      TPM0_C1V = 0x0EA6;
-      TPM0_C0V = 0;
-      TPM0_C3V = 0x0EA6;
-      TPM0_C2V = 0;
+      moveforward();
     } else if (led_control == STOP_MOVE) {
 			Led_control_Off(RED_LED);
-			TPM0_C1V = 0;
-      TPM0_C0V = 0;
-      TPM0_C3V = 0;
-      TPM0_C2V = 0;
-    } else if (led_control == 0x33) {
-    } else if (led_control == 0x32) {
-    } else if (led_control == 0x35) {
-    } else if (led_control == 0x34) {
-    }
+			movestop();
+    } else if (led_control == BACK_MOVE) {
+			movebackward();
+    } else if (led_control == RIGHT_MOVE) {
+			moveright();
+    } else if (led_control == LEFT_MOVE) {
+			moveleft();
+    } else if (led_control == FORWARD_RIGHT_MOVE) {
+			Led_control_On(RED_LED);
+      moveforwardright();
+    } else if (led_control == FORWARD_LEFT_MOVE) {
+			Led_control_On(RED_LED);
+      moveforwardleft();
+    } else if (led_control == BACK_LEFT_MOVE) {
+			Led_control_On(RED_LED);
+      movebackwardleft();
+		} else if (led_control == BACK_RIGHT_MOVE) {
+			Led_control_On(RED_LED);
+      movebackwardright();
+		}
+		
   }
 
 }

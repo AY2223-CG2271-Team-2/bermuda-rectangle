@@ -19,3 +19,4 @@
 .\objects\main.o: init.h
 .\objects\main.o: C:\Users\wilso\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include\MKL25Z4.h
 .\objects\main.o: music.h
+.\objects\main.o: motor.h
