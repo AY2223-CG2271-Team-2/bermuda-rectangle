@@ -13,6 +13,8 @@
 
 //***** Motor ********//
 
+#define INIT_PWM 0
+
 #define PTB0_PIN 0
 #define PTB1_PIN 1
 #define MUSIC_PIN

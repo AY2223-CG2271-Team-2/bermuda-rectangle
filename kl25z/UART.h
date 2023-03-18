@@ -1,14 +1,14 @@
-#include "MKL25Z4.h"                    // Device header
+#include "MKL25Z4.h"  // Device header
 #include "RTE_Components.h"
-#include  CMSIS_device_header
+#include CMSIS_device_header
 #include "cmsis_os2.h"
 
-extern volatile uint8_t led_control;
+extern volatile uint8_t rx_data;
 
 extern enum color_t {
-	RED_LED = 18,   //PortB Pin 18 
-	GREEN_LED = 19, //PortB Pin 19
-	BLUE_LED = 1    //PortD pin 1
+  RED_LED = 18,    // PortB Pin 18
+  GREEN_LED = 19,  // PortB Pin 19
+  BLUE_LED = 1     // PortD pin 1
 } color_t;
 
 void InitGPIO(void);
