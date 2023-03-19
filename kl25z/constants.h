@@ -60,6 +60,8 @@
 #define BACK_RIGHT_MOVE 0x08
 #define STOP_MOVE 0x09
 
+#define END_MOVE 0x0A
+
 //****** Others ******//
 
 #define LED_RED 2  // 0b00000010
