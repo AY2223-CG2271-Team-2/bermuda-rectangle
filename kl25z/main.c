@@ -11,6 +11,7 @@
 #include "init.h"
 #include "motor.h"
 #include "music.h"
+#include "ledControl.h"
 
 // osMessageQueueId_t audioQ, motorQ, backLedRedQ, frontLedGreenQ;
 
@@ -39,48 +40,54 @@ void audio_thread(void *argument) {
   }
 }
 
+void motor_thread(void *argument) {
+	  for (;;) {
+			if (rx_data == RIGHT_MOVE) {
+				moveright();
+			} else if (rx_data == LEFT_MOVE) {
+				moveleft();
+			} else if (rx_data == FORWARD_MOVE) {
+				Led_control_On(RED_LED);
+				moveforward();
+			} else if (rx_data == STOP_MOVE) {
+				Led_control_Off(RED_LED);
+				movestop();
+			} else if (rx_data == BACK_MOVE) {
+				movebackward();
+			} else if (rx_data == FORWARD_RIGHT_MOVE) {
+				Led_control_On(RED_LED);
+				moveforwardright();
+			} else if (rx_data == FORWARD_LEFT_MOVE) {
+				Led_control_On(RED_LED);
+				moveforwardleft();
+			} else if (rx_data == BACK_LEFT_MOVE) {
+				Led_control_On(RED_LED);
+				movebackwardleft();
+			} else if (rx_data == BACK_RIGHT_MOVE) {
+				Led_control_On(RED_LED);
+				movebackwardright();
+			}
+		}
+  }
+
 int main(void) {
   // System Initialization
   SystemCoreClockUpdate();
   InitGPIO();
   initUART2(BAUD_RATE);
   initPWM();
+	initRedLED();
+	initGreenLED();
   // ...
 
-  // osKernelInitialize();  // Initialize CMSIS-RTOS
-  // osThreadNew(motor_control_thread, NULL, NULL);
-  // osThreadNew(app_main, NULL, NULL);  // Create application main thread
-  // osKernelStart();  // Start thread execution
-  //  for (;;) {}
+  osKernelInitialize();  // Initialize CMSIS-RTOS
+  osThreadNew(tMovingGreenLED, NULL, NULL); 
+	osThreadNew(tStationaryRedLED, NULL, NULL);
+	osThreadNew(astronomia, NULL, NULL);
+	//osThreadNew(motor_thread, NULL, NULL);
+  osKernelStart();  // Start thread execution
+  for (;;) {}
 
-  // Speaker
-  TPM1_C0V = 3750;
-
-  while (1) {
-    if (rx_data == RIGHT_MOVE) {
-      moveright();
-    } else if (rx_data == LEFT_MOVE) {
-      moveleft();
-    } else if (rx_data == FORWARD_MOVE) {
-      Led_control_On(RED_LED);
-      moveforward();
-    } else if (rx_data == STOP_MOVE) {
-      Led_control_Off(RED_LED);
-      movestop();
-    } else if (rx_data == BACK_MOVE) {
-      movebackward();
-    } else if (rx_data == FORWARD_RIGHT_MOVE) {
-      Led_control_On(RED_LED);
-      moveforwardright();
-    } else if (rx_data == FORWARD_LEFT_MOVE) {
-      Led_control_On(RED_LED);
-      moveforwardleft();
-    } else if (rx_data == BACK_LEFT_MOVE) {
-      Led_control_On(RED_LED);
-      movebackwardleft();
-    } else if (rx_data == BACK_RIGHT_MOVE) {
-      Led_control_On(RED_LED);
-      movebackwardright();
-    }
-  }
+//  // Speaker
+//  TPM1_C0V = 3750;
 }
