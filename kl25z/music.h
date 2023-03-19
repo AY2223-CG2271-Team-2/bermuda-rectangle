@@ -93,5 +93,4 @@
 
 
 void astronomia();
-void playStarWars();
 void playEndingMusic();

@@ -1,4 +1,3 @@
-#include "MKL25Z4.h"
 #include "music.h"
 #include "constants.h"
 #include "init.h"
@@ -17,14 +16,14 @@ int bbqLe[] = {
 };
 
 int bbqLeDuration[] = {
-	4, 4, 4, 4, 4, 4, 4, 4,
-	4, 4, 4, 4, 4,
-	4, 4, 4, 4, 4, 4, 4,
-	4, 4, 4, 4, 4, 4,
-	4, 4, 4, 4, 4, 4,
-	4, 4, 4, 4, 4, 4,
-	4, 4, 4, 4, 4, 4,
-	4, 4, 4, 4, 4
+	4, 4, 4, 4, 4, 4, 6, 
+	4, 4, 4, 4, 6,
+	4, 4, 4, 4, 4, 4, 6,
+	4, 4, 4, 4, 4, 8,
+	4, 4, 4, 4, 4, 6,
+	4, 4, 4, 4, 4, 6,
+	4, 4, 4, 4, 4, 6,
+	4, 4, 4, 4, 6
 };
 
 int starWarsMelody[] = {
@@ -374,8 +373,8 @@ int coffinMelody[] = {
   NOTE_C5, 0, NOTE_AS4, NOTE_A4, 
   NOTE_G4,0, NOTE_G4, NOTE_AS5,
   NOTE_A5, NOTE_AS5, NOTE_A5, NOTE_AS5,
-  NOTE_G4,0, NOTE_G4, NOTE_AS5,
-  NOTE_A5, NOTE_AS5, NOTE_A5, NOTE_AS5
+	NOTE_G4,0, NOTE_G4, NOTE_AS5,
+	NOTE_A5, NOTE_AS5, NOTE_A5, NOTE_AS5
  };
 
  int coffinDurations[] = {
@@ -404,9 +403,7 @@ int coffinMelody[] = {
   4,4,4,4,
   4,4,4,4,
   4,4,4,4,
-  4,4,4,4,
-  4,4,4,4,
-  4,4,4,4,
+  4,4,4,4
   };
 
 void astronomia() {
@@ -423,10 +420,10 @@ void astronomia() {
 			period = FREQ_2_MOD(coffinMelody[i]);
 			TPM1->MOD = period;
 			TPM1_C0V = period / 4; //12.5% duty cycle
-			delay_mult100(10*noteDuration);
+			delay_mult40(10*noteDuration);
 			TPM1->MOD = 0;
 			TPM1_C0V = 0;
-			delay_mult100(9*noteDuration);
+			delay_mult40(9*noteDuration);
 		}
 		
 	}
@@ -446,10 +443,10 @@ void playEndingMusic() {
 			period = FREQ_2_MOD(bbqLe[i]);
 			TPM1->MOD = period;
 			TPM1_C0V = period / 4; //12.5% duty cycle
-			delay_mult100(10*noteDuration);
+			delay_mult40(12*noteDuration);
 			TPM1->MOD = 0;
 			TPM1_C0V = 0;
-			delay_mult100(9*noteDuration);
+			delay_mult40(12*noteDuration);
 		}
 		
 	}

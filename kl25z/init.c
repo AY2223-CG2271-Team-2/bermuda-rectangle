@@ -10,8 +10,8 @@ static void delay(volatile uint32_t nof) {
   }
 }
 
-void delay_mult100(volatile uint32_t nof) {
-  for(int i=0;i<100;i++) {
+void delay_mult40(volatile uint32_t nof) {
+  for(int i=0;i<40;i++) {
     delay(nof);
   }
 }

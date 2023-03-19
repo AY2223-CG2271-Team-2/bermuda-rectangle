@@ -31,6 +31,7 @@ void motor_control_thread(void *argument) {
   _data.data = STOP_MOVE;
 
   for (;;) {
+		
   }
 }
 
@@ -83,7 +84,8 @@ int main(void) {
   osKernelInitialize();  // Initialize CMSIS-RTOS
   osThreadNew(tMovingGreenLED, NULL, NULL); 
 	osThreadNew(tStationaryRedLED, NULL, NULL);
-	osThreadNew(astronomia, NULL, NULL);
+	//osThreadNew(astronomia, NULL, NULL);
+	osThreadNew(playEndingMusic, NULL, NULL);
 	osThreadNew(motor_thread, NULL, NULL);
   osKernelStart();  // Start thread execution
   for (;;) {}
@@ -93,33 +95,5 @@ int main(void) {
   // Speaker
   TPM1_C0V = 3750;
 
-  while (1) {
-		//playStarWars();
-		playEndingMusic();
-//    if (rx_data == RIGHT_MOVE) {
-//      moveright();
-//    } else if (rx_data == LEFT_MOVE) {
-//      moveleft();
-//    } else if (rx_data == FORWARD_MOVE) {
-//      Led_control_On(RED_LED);
-//      moveforward();
-//    } else if (rx_data == STOP_MOVE) {
-//      Led_control_Off(RED_LED);
-//      movestop();
-//    } else if (rx_data == BACK_MOVE) {
-//      movebackward();
-//    } else if (rx_data == FORWARD_RIGHT_MOVE) {
-//      Led_control_On(RED_LED);
-//      moveforwardright();
-//    } else if (rx_data == FORWARD_LEFT_MOVE) {
-//      Led_control_On(RED_LED);
-//      moveforwardleft();
-//    } else if (rx_data == BACK_LEFT_MOVE) {
-//      Led_control_On(RED_LED);
-//      movebackwardleft();
-//    } else if (rx_data == BACK_RIGHT_MOVE) {
-//      Led_control_On(RED_LED);
-//      movebackwardright();
-//    }
-  }
+  
 }
