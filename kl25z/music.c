@@ -388,9 +388,9 @@ int coffinMelody[] = {
   4,4,4,4,
   };
 
-void playStarWars() {
+void astronomia() {
 	
-	int notes = sizeof(caribbeanDurations) / sizeof(caribbeanDurations[0]);
+	int notes = sizeof(coffinDurations) / sizeof(coffinDurations[0]);
 
 	int noteDuration = 0, period = 0;
 	
