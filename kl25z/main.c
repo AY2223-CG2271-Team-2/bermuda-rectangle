@@ -84,14 +84,12 @@ int main(void) {
   osThreadNew(tMovingGreenLED, NULL, NULL); 
 	osThreadNew(tStationaryRedLED, NULL, NULL);
 	osThreadNew(astronomia, NULL, NULL);
-	//osThreadNew(motor_thread, NULL, NULL);
+	osThreadNew(motor_thread, NULL, NULL);
   osKernelStart();  // Start thread execution
   for (;;) {}
 
-<<<<<<< Updated upstream
 //  // Speaker
 //  TPM1_C0V = 3750;
-=======
   // Speaker
   TPM1_C0V = 3750;
 
@@ -124,5 +122,4 @@ int main(void) {
 //      movebackwardright();
 //    }
   }
->>>>>>> Stashed changes
 }
