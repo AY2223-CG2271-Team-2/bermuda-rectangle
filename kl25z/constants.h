@@ -64,6 +64,8 @@
 
 //****** Others ******//
 
+#define MSG_COUNT 1
+
 #define LED_RED 2  // 0b00000010
 #define FUNCTION_MASK(x) (x & 0xF0)
 #define LED_MASK(x) (x & 0x0F)

@@ -98,6 +98,9 @@ void initPWM(void)
   TPM0_C3SC &= ~((TPM_CnSC_ELSB_MASK) | (TPM_CnSC_ELSA_MASK) | (TPM_CnSC_MSB_MASK) | (TPM_CnSC_MSA_MASK));
   TPM0_C3SC |= (TPM_CnSC_ELSB(1) | TPM_CnSC_MSB(1));
 	
+	// Speaker
+  TPM1_C0V = 3750;
+	
 }
 
 //Initiate the necessary LEDs
