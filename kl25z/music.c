@@ -5,6 +5,27 @@
 
 int tempo = 144;
 
+int bbqLe[] = {
+	NOTE_G5, NOTE_G5, NOTE_G5, NOTE_G5, NOTE_G5, NOTE_G5, 0,
+	NOTE_A5, NOTE_G5, NOTE_A5, NOTE_G5, 0,
+	NOTE_A5, NOTE_G5, NOTE_A5, NOTE_G5, NOTE_A5, NOTE_G5, 0,
+	NOTE_D5, NOTE_E5, NOTE_D5, NOTE_C5, NOTE_D5, 0,
+	NOTE_G5, NOTE_G5, NOTE_G5, NOTE_A5, NOTE_G5, 0,
+	NOTE_D5, NOTE_D5, NOTE_D5, NOTE_E5, NOTE_D5, 0,
+	NOTE_D5, NOTE_C5, NOTE_D5, NOTE_E5, NOTE_D5, NOTE_D5, 0,
+	NOTE_D5, NOTE_E5, NOTE_D5, NOTE_C5, 0
+};
+
+int bbqLeDuration[] = {
+	4, 4, 4, 4, 4, 4, 4, 4,
+	4, 4, 4, 4, 4,
+	4, 4, 4, 4, 4, 4, 4,
+	4, 4, 4, 4, 4, 4,
+	4, 4, 4, 4, 4, 4,
+	4, 4, 4, 4, 4, 4,
+	4, 4, 4, 4, 4, 4,
+	4, 4, 4, 4, 4
+};
 
 int starWarsMelody[] = {
   NOTE_AS4, NOTE_AS4, NOTE_AS4,
@@ -411,3 +432,25 @@ void astronomia() {
 	}
 }
 
+void playEndingMusic() {
+	
+	int notes = sizeof(bbqLeDuration) / sizeof(bbqLeDuration[0]);
+
+	int noteDuration = 0, period = 0;
+	
+	while(1) {
+		
+		for(int i = 0; i<notes; i+=1) {
+			// calculates the duration of each note
+			noteDuration = 1000 / bbqLeDuration[i];
+			period = FREQ_2_MOD(bbqLe[i]);
+			TPM1->MOD = period;
+			TPM1_C0V = period / 4; //12.5% duty cycle
+			delay_mult100(10*noteDuration);
+			TPM1->MOD = 0;
+			TPM1_C0V = 0;
+			delay_mult100(9*noteDuration);
+		}
+		
+	}
+}

@@ -88,6 +88,41 @@ int main(void) {
   osKernelStart();  // Start thread execution
   for (;;) {}
 
+<<<<<<< Updated upstream
 //  // Speaker
 //  TPM1_C0V = 3750;
+=======
+  // Speaker
+  TPM1_C0V = 3750;
+
+  while (1) {
+		//playStarWars();
+		playEndingMusic();
+//    if (rx_data == RIGHT_MOVE) {
+//      moveright();
+//    } else if (rx_data == LEFT_MOVE) {
+//      moveleft();
+//    } else if (rx_data == FORWARD_MOVE) {
+//      Led_control_On(RED_LED);
+//      moveforward();
+//    } else if (rx_data == STOP_MOVE) {
+//      Led_control_Off(RED_LED);
+//      movestop();
+//    } else if (rx_data == BACK_MOVE) {
+//      movebackward();
+//    } else if (rx_data == FORWARD_RIGHT_MOVE) {
+//      Led_control_On(RED_LED);
+//      moveforwardright();
+//    } else if (rx_data == FORWARD_LEFT_MOVE) {
+//      Led_control_On(RED_LED);
+//      moveforwardleft();
+//    } else if (rx_data == BACK_LEFT_MOVE) {
+//      Led_control_On(RED_LED);
+//      movebackwardleft();
+//    } else if (rx_data == BACK_RIGHT_MOVE) {
+//      Led_control_On(RED_LED);
+//      movebackwardright();
+//    }
+  }
+>>>>>>> Stashed changes
 }

@@ -150,7 +150,11 @@
       </TargetDriverDllRegistry>
       <Breakpoint/>
       <ScvdPack>
+<<<<<<< Updated upstream
         <Filename>C:\Users\Ivan Theng\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\RTX\RTX5.scvd</Filename>
+=======
+        <Filename>C:\Users\wilso\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\RTX\RTX5.scvd</Filename>
+>>>>>>> Stashed changes
         <Type>ARM.CMSIS.5.6.0</Type>
         <SubType>1</SubType>
       </ScvdPack>

@@ -92,4 +92,9 @@
 
 
 
+<<<<<<< Updated upstream
 void astronomia();
+=======
+void playStarWars();
+void playEndingMusic();
+>>>>>>> Stashed changes
