@@ -12,6 +12,7 @@
 #include "ledControl.h"
 #include "motor.h"
 #include "music.h"
+#include <stdbool.h>
 
 osSemaphoreId_t audioSemaphore;
 osMessageQueueId_t controlQ, audioQ, motorQ, ledQ, backLedRedQ, frontLedGreenQ;
@@ -66,15 +67,22 @@ void tAudio(void *argument) {
   data_packet_t _packet;
 
   for (;;) {
-    osMessageQueueGet(audioQ, &_packet, NULL, 0);
-    if (_packet.data != END_MOVE) {
-      astronomia();
-    } else {
-      // FIXME: Switch of audio issue
-      osSemaphoreAcquire(audioSemaphore, osWaitForever);
-      playEndingMusic();
-    }
-  }
+
+    //if (_packet.data != END_MOVE) {
+    //  astronomia(audioQ, audioSemaphore);
+    //} else {
+    //  // FIXME: Switch of audio issue
+    //  osSemaphoreAcquire(audioSemaphore, osWaitForever);
+    //  playEndingMusic();
+    //}
+		
+		if (!isEndMove()) {
+			astronomia(audioQ, audioSemaphore);
+		} else {
+			osSemaphoreAcquire(audioSemaphore, osWaitForever);
+			playEndingMusic();
+		}
+	}
 }
 
 void tLED(void *argument) {
@@ -85,13 +93,21 @@ void tLED(void *argument) {
   for (;;) {
     osMessageQueueGet(ledQ, &_packet, NULL, 0);
 		
-		if ((_packet.data != STOP_MOVE) && (_packet.data != END_MOVE) && (_packet.data != INITIALISE)){
-			tMovingGreenLED();
-      tMovingRedLED();
-		} else {
+		if ((_packet.data == STOP_MOVE) || (_packet.data == END_MOVE) || (_packet.data == INITIALISE)) {
 			tStationaryGreenLED();
       tStationaryRedLED();
-		}
+		} else {
+			tMovingGreenLED();
+      tMovingRedLED();
+		}	
+		
+//		if ((_packet.data != STOP_MOVE) && (_packet.data != END_MOVE) && (_packet.data != INITIALISE)){
+//			tMovingGreenLED();
+//      tMovingRedLED();
+//		} else {
+//			tStationaryGreenLED();
+//      tStationaryRedLED();
+//		}
     
   }
 }

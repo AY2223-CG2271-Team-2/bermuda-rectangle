@@ -3,8 +3,13 @@
 #include "constants.h"
 #include "data_packet.h"
 #include "init.h"
+#include "cmsis_os2.h"
+#include <stdbool.h>
+
 
 int tempo = 144;
+
+data_packet_t global_music_packet;
 
 int bbqLe[] = {
     NOTE_G5, NOTE_G5, NOTE_G5, NOTE_G5, NOTE_G5, NOTE_G5, 0,
@@ -397,7 +402,9 @@ int coffinDurations[] = {
     4, 4, 4, 4,
     4, 4, 4, 4};
 
-void astronomia() {
+void astronomia(osMessageQueueId_t audioQ, osSemaphoreId_t audioSemaphore) {
+
+
   int notes = sizeof(coffinDurations) / sizeof(coffinDurations[0]);
 
   int noteDuration = 0, period = 0;
@@ -415,14 +422,19 @@ void astronomia() {
     TPM1->MOD = 0;
     TPM1_C0V = 0;
     delay_mult40(16 * noteDuration);
-
-    // Check
-  }
-
+		
+		osMessageQueueGet(audioQ, &global_music_packet, NULL, 0);
+		
+		if (global_music_packet.data == END_MOVE) {
+			osSemaphoreRelease(audioSemaphore);
+			break;
+		}
+		
   //}
+	}
 }
 
-void playEndingMusic(data_packet_t _p) {
+void playEndingMusic() {
   int notes = sizeof(bbqLeDuration) / sizeof(bbqLeDuration[0]);
 
   int noteDuration = 0, period = 0;
@@ -441,6 +453,11 @@ void playEndingMusic(data_packet_t _p) {
     TPM1_C0V = 0;
     delay_mult40(12 * noteDuration);
   }
+	while(1);
 
   //}
+}
+
+bool isEndMove() {
+	return (global_music_packet.data == END_MOVE);
 }
