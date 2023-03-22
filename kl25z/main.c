@@ -14,7 +14,7 @@
 #include "music.h"
 
 osSemaphoreId_t audioSemaphore;
-osMessageQueueId_t controlQ, audioQ, motorQ, ledQ;
+osMessageQueueId_t controlQ, audioQ, motorQ, ledQ, backLedRedQ, frontLedGreenQ;
 data_packet_t global_packet;
 
 /*----------------------------------------------------------------------------
@@ -79,17 +79,20 @@ void tAudio(void *argument) {
 
 void tLED(void *argument) {
   data_packet_t _packet;
-
+	
+	tStationaryGreenLED();
+	tStationaryRedLED();
   for (;;) {
     osMessageQueueGet(ledQ, &_packet, NULL, 0);
-
-    if (_packet.data == STOP_MOVE) {
-      tStationaryGreenLED();
-      tStationaryRedLED();
-    } else {
-      tMovingGreenLED();
+		
+		if ((_packet.data != STOP_MOVE) && (_packet.data != END_MOVE) && (_packet.data != INITIALISE)){
+			tMovingGreenLED();
       tMovingRedLED();
-    }
+		} else {
+			tStationaryGreenLED();
+      tStationaryRedLED();
+		}
+    
   }
 }
 

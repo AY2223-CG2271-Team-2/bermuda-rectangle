@@ -50,6 +50,7 @@
 #define VROOM_VROOM 0x00
 
 // Data
+#define INITIALISE 0x00
 #define FORWARD_MOVE 0x01
 #define FORWARD_LEFT_MOVE 0x02
 #define FORWARD_RIGHT_MOVE 0x03

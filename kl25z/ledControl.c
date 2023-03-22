@@ -123,7 +123,7 @@ void tMovingGreenLED (void *argument) {
 }
 
 void tStationaryGreenLED (void *argument) {
-//		for (;;) {
+		//for (;;) {
 				onAllGreenLED();			
-//		}
+		//}
 }
