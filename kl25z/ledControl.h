@@ -27,5 +27,6 @@
 void initRedLED();
 void initGreenLED();
 void tMovingGreenLED();
+void tMovingRedLED();
 void tStationaryGreenLED();
 void tStationaryRedLED();

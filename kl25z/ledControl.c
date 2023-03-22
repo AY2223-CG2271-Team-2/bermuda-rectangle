@@ -6,6 +6,8 @@
 
 #include "ledControl.h" 
 
+volatile int running_green_LED_pos = 0;
+
 void onAllGreenLED (void) {
 		PTB->PDOR |= (MASK(LED_GREEN_PORTB8) | MASK(LED_GREEN_PORTB9)| MASK(LED_GREEN_PORTB10)| MASK(LED_GREEN_PORTB11));
 		PTC->PDOR |= MASK(LED_GREEN_PORTC8) | MASK(LED_GREEN_PORTC9)| MASK(LED_GREEN_PORTC10)| MASK(LED_GREEN_PORTC11);	
@@ -51,36 +53,36 @@ void initGreenLED (void) {
 		onAllGreenLED();
 }
 
-void tLED (void *argument) {
-		for (;;) {
-				if (isMoving) {    // Rx value within MOVING COMMAND value range
-						// Run tMovingRedLED thread/task
-						// Run tMovingGreenLED thread/task
-					
-				}	else {
-						// Run tStationaryRedLED thread/task
-						// Run tStationaryGreenLED thread/task
-				}					
-		}
-}
+//void tLED (void *argument) {
+//		for (;;) {
+//				if (isMoving) {    // Rx value within MOVING COMMAND value range
+//						// Run tMovingRedLED thread/task
+//						// Run tMovingGreenLED thread/task
+//					
+//				}	else {
+//						// Run tStationaryRedLED thread/task
+//						// Run tStationaryGreenLED thread/task
+//				}					
+//		}
+//}
 
-void tMovingRedLED (void *argument) {
-		for (;;) {
+void tMovingRedLED () {
+//		for (;;) {
 			PTA->PTOR |= MASK(LED_RED_PORTA1);
 			osDelay(LED_TOGGLE_INTERVAL_1HZ);
-		}
+//		}
 }
 
-void tStationaryRedLED (void *argument) {
-		for (;;) {
+void tStationaryRedLED () {
+//		for (;;) {
 			PTA->PTOR |= MASK(LED_RED_PORTA1);
 			osDelay(LED_TOGGLE_INTERVAL_2HZ);
-		}
+//		}
 }
 
 void tMovingGreenLED (void *argument) {
-		int running_green_LED_pos = 0;
-		for (;;) {
+		
+		//for (;;) {
 				offAllGreenLED();
 				// Running Green LED (Position 0 - 7 from left to right)
 				// To be edited based on hardware
@@ -117,11 +119,11 @@ void tMovingGreenLED (void *argument) {
 				} else {
 						running_green_LED_pos++;
 				}
-		}
+		//}
 }
 
 void tStationaryGreenLED (void *argument) {
-		for (;;) {
+//		for (;;) {
 				onAllGreenLED();			
-		}
+//		}
 }

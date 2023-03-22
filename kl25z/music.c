@@ -410,10 +410,11 @@ void astronomia() {
     period = FREQ_2_MOD(coffinMelody[i]);
     TPM1->MOD = period;
     TPM1_C0V = period / 4;  // 12.5% duty cycle
-    delay_mult40(15 * noteDuration);
+    // TODO: Change to osDelay
+    delay_mult40(17 * noteDuration);
     TPM1->MOD = 0;
     TPM1_C0V = 0;
-    delay_mult40(14 * noteDuration);
+    delay_mult40(16 * noteDuration);
 
     // Check
   }
@@ -434,6 +435,7 @@ void playEndingMusic(data_packet_t _p) {
     period = FREQ_2_MOD(bbqLe[i]);
     TPM1->MOD = period;
     TPM1_C0V = period / 4;  // 12.5% duty cycle
+    // TODO: Change to osDelay
     delay_mult40(12 * noteDuration);
     TPM1->MOD = 0;
     TPM1_C0V = 0;

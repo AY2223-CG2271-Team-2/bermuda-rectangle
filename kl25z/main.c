@@ -14,7 +14,7 @@
 #include "music.h"
 
 osSemaphoreId_t audioSemaphore;
-osMessageQueueId_t controlQ, audioQ, motorQ, backLedRedQ, frontLedGreenQ;
+osMessageQueueId_t controlQ, audioQ, motorQ, ledQ;
 data_packet_t global_packet;
 
 /*----------------------------------------------------------------------------
@@ -77,11 +77,28 @@ void tAudio(void *argument) {
   }
 }
 
+void tLED(void *argument) {
+  data_packet_t _packet;
+
+  for (;;) {
+    osMessageQueueGet(ledQ, &_packet, NULL, 0);
+
+    if (_packet.data == STOP_MOVE) {
+      tStationaryGreenLED();
+      tStationaryRedLED();
+    } else {
+      tMovingGreenLED();
+      tMovingRedLED();
+    }
+  }
+}
+
 void tControl(void *argument) {
   for (;;) {
     osMessageQueueGet(controlQ, &global_packet, NULL, osWaitForever);
     osMessageQueuePut(motorQ, &global_packet, NULL, 0);
     osMessageQueuePut(audioQ, &global_packet, NULL, 0);
+    osMessageQueuePut(ledQ, &global_packet, NULL, 0);
   }
 }
 
@@ -100,11 +117,13 @@ int main(void) {
   motorQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
   backLedRedQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
   frontLedGreenQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
+  ledQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
 
   osKernelInitialize();  // Initialize CMSIS-RTOS
   audioSemaphore = osThreadNew(tControl, NULL, NULL);
   osThreadNew(tMotor, NULL, NULL);
   osThreadNew(tAudio, NULL, NULL);
+  osThreadNew(tLED, NULL, NULL);
   osKernelStart();  // Start thread execution
   for (;;) {
   }

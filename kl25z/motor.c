@@ -33,12 +33,12 @@ void moveright(int _pwm) {
   TPM0_C0V = 0;
   TPM0_C3V = 0;
   TPM0_C2V = 0x0EA6;
-  delay(0x1000);
+  osDelay(50);
   TPM0_C1V = 0;
   TPM0_C0V = 0;
   TPM0_C3V = 0;
   TPM0_C2V = 0;
-  delay(0x1000);
+  osDelay(50);
 }
 
 void moveleft(int _pwm) {
@@ -46,12 +46,12 @@ void moveleft(int _pwm) {
   TPM0_C0V = 0x0EA6;
   TPM0_C3V = 0x0EA6;
   TPM0_C2V = 0;
-  delay(0x1000);
+  osDelay(50);
   TPM0_C1V = 0;
   TPM0_C0V = 0;
   TPM0_C3V = 0;
   TPM0_C2V = 0;
-  delay(0x1000);
+  osDelay(50);
 }
 
 void moveforwardright(int _pwm) {
@@ -59,12 +59,12 @@ void moveforwardright(int _pwm) {
   TPM0_C0V = 0;
   TPM0_C3V = 0x0EA6;
   TPM0_C2V = 0;
-  delay(0x1000);
+  osDelay(50);
   TPM0_C1V = 0x0EA6;
   TPM0_C0V = 0;
   TPM0_C3V = 0;
   TPM0_C2V = 0;
-  delay(0x1000);
+  osDelay(50);
 }
 
 void moveforwardleft(int _pwm) {
@@ -72,12 +72,12 @@ void moveforwardleft(int _pwm) {
   TPM0_C0V = 0;
   TPM0_C3V = 0x0EA6;
   TPM0_C2V = 0;
-  delay(0x1000);
+  osDelay(50);
   TPM0_C1V = 0;
   TPM0_C0V = 0;
   TPM0_C3V = 0x0EA6;
   TPM0_C2V = 0;
-  delay(0x1000);
+  osDelay(50);
 }
 
 void movebackwardright(int _pwm) {
@@ -85,12 +85,12 @@ void movebackwardright(int _pwm) {
   TPM0_C0V = 0x0EA6;
   TPM0_C3V = 0;
   TPM0_C2V = 0x0EA6;
-  delay(0x1000);
+  osDelay(50);
   TPM0_C1V = 0;
   TPM0_C0V = 0;
   TPM0_C3V = 0;
   TPM0_C2V = 0x0EA6;
-  delay(0x1000);
+  osDelay(50);
 }
 
 void movebackwardleft(int _pwm) {
@@ -98,10 +98,10 @@ void movebackwardleft(int _pwm) {
   TPM0_C0V = 0x0EA6;
   TPM0_C3V = 0;
   TPM0_C2V = 0x0EA6;
-  delay(0x1000);
+  osDelay(50);
   TPM0_C1V = 0;
   TPM0_C0V = 0x0EA6;
   TPM0_C3V = 0;
   TPM0_C2V = 0;
-  delay(0x1000);
+  osDelay(50);
 }
