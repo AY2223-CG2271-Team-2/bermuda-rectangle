@@ -39,24 +39,24 @@ void tMotor(void *argument) {
     } else if (_packet.data == LEFT_MOVE) {
       moveleft();
     } else if (_packet.data == FORWARD_MOVE) {
-      Led_control_On(RED_LED);
+      //Led_control_On(RED_LED);
       moveforward();
     } else if (_packet.data == STOP_MOVE) {
-      Led_control_Off(RED_LED);
+      //Led_control_Off(RED_LED);
       movestop();
     } else if (_packet.data == BACK_MOVE) {
       movebackward();
     } else if (_packet.data == FORWARD_RIGHT_MOVE) {
-      Led_control_On(RED_LED);
+      //Led_control_On(RED_LED);
       moveforwardright();
     } else if (_packet.data == FORWARD_LEFT_MOVE) {
-      Led_control_On(RED_LED);
+      //Led_control_On(RED_LED);
       moveforwardleft();
     } else if (_packet.data == BACK_LEFT_MOVE) {
-      Led_control_On(RED_LED);
+      //Led_control_On(RED_LED);
       movebackwardleft();
     } else if (_packet.data == BACK_RIGHT_MOVE) {
-      Led_control_On(RED_LED);
+      //Led_control_On(RED_LED);
       movebackwardright();
     }
   }
@@ -79,7 +79,7 @@ void tAudio(void *argument) {
 		if (!isEndMove()) {
 			astronomia(audioQ, audioSemaphore);
 		} else {
-			osSemaphoreAcquire(audioSemaphore, osWaitForever);
+			//osSemaphoreAcquire(audioSemaphore, osWaitForever);
 			playEndingMusic();
 		}
 	}
@@ -100,14 +100,6 @@ void tLED(void *argument) {
 			tMovingGreenLED();
       tMovingRedLED();
 		}	
-		
-//		if ((_packet.data != STOP_MOVE) && (_packet.data != END_MOVE) && (_packet.data != INITIALISE)){
-//			tMovingGreenLED();
-//      tMovingRedLED();
-//		} else {
-//			tStationaryGreenLED();
-//      tStationaryRedLED();
-//		}
     
   }
 }

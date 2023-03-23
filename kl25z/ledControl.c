@@ -112,7 +112,7 @@ void tMovingGreenLED (void *argument) {
 						PTB->PDOR |= (MASK(LED_GREEN_PORTB11));
 						break;										
 				}
-				osDelay(500);
+				osDelay(50);
 				
 				if (running_green_LED_pos == 7) {
 						running_green_LED_pos = 0;
