@@ -14,7 +14,7 @@
 #include "music.h"
 #include <stdbool.h>
 
-osSemaphoreId_t audioSemaphore;
+osSemaphoreId_t audioSemaphore, ledSemaphore;
 osMessageQueueId_t controlQ, audioQ, motorQ, ledQ, backLedRedQ, frontLedGreenQ;
 data_packet_t global_packet;
 
@@ -91,15 +91,24 @@ void tLED(void *argument) {
 	tStationaryGreenLED();
 	tStationaryRedLED();
   for (;;) {
-    osMessageQueueGet(ledQ, &_packet, NULL, 0);
+    //tMovingGreenLED();
+    //tMovingRedLED();
+		
+		osMessageQueueGet(ledQ, &_packet, NULL, 0);
+		
 		
 		if ((_packet.data == STOP_MOVE) || (_packet.data == END_MOVE) || (_packet.data == INITIALISE)) {
-			tStationaryGreenLED();
-      tStationaryRedLED();
+			tStationaryGreenLED(ledQ, ledSemaphore);
+      tStationaryRedLED(ledQ, ledSemaphore);
 		} else {
-			tMovingGreenLED();
-      tMovingRedLED();
-		}	
+			tMovingGreenLED(ledQ, ledSemaphore);
+			tMovingRedLED(ledQ, ledSemaphore);
+		}			
+		
+//		else {
+//			tMovingGreenLED();
+//      tMovingRedLED();
+//		}	
     
   }
 }
@@ -126,8 +135,8 @@ int main(void) {
   controlQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
   audioQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
   motorQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
-  backLedRedQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
-  frontLedGreenQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
+  //backLedRedQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
+  //frontLedGreenQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
   ledQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
 
   osKernelInitialize();  // Initialize CMSIS-RTOS

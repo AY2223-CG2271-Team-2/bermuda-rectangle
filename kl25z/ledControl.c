@@ -5,8 +5,14 @@
 #include "constants.h"
 
 #include "ledControl.h" 
+#include "data_packet.h"
+#include <stdbool.h>
+
 
 volatile int running_green_LED_pos = 0;
+
+int green_led_pos[4] = {MASK(LED_GREEN_PORTC8), MASK(LED_GREEN_PORTC9), MASK(LED_GREEN_PORTC10), MASK(LED_GREEN_PORTC11)};
+int green_led_pos2[4] = {MASK(LED_GREEN_PORTB8), MASK(LED_GREEN_PORTB9), MASK(LED_GREEN_PORTB10), MASK(LED_GREEN_PORTB11)};
 
 void onAllGreenLED (void) {
 		PTB->PDOR |= (MASK(LED_GREEN_PORTB8) | MASK(LED_GREEN_PORTB9)| MASK(LED_GREEN_PORTB10)| MASK(LED_GREEN_PORTB11));
@@ -70,6 +76,7 @@ void tMovingRedLED () {
 //		for (;;) {
 			PTA->PTOR |= MASK(LED_RED_PORTA1);
 			osDelay(LED_TOGGLE_INTERVAL_1HZ);
+		
 //		}
 }
 
@@ -80,50 +87,72 @@ void tStationaryRedLED () {
 //		}
 }
 
-void tMovingGreenLED (void *argument) {
+void tMovingGreenLED () {
 		
 		//for (;;) {
-				offAllGreenLED();
+				//offAllGreenLED();
 				// Running Green LED (Position 0 - 7 from left to right)
 				// To be edited based on hardware
-				switch (running_green_LED_pos) {
-				case 0:
-						PTC->PDOR |= (MASK(LED_GREEN_PORTC8));
-						break;
-				case 1:
-						PTC->PDOR |= (MASK(LED_GREEN_PORTC9));
-						break;
-				case 2:
-						PTC->PDOR |= (MASK(LED_GREEN_PORTC10));
-						break;
-				case 3:
-						PTC->PDOR |= (MASK(LED_GREEN_PORTC11));
-						break;
-				case 4:
-						PTB->PDOR |= (MASK(LED_GREEN_PORTB8));
-						break;
-				case 5:
-						PTB->PDOR |= (MASK(LED_GREEN_PORTB9));
-						break;			
-				case 6:
-						PTB->PDOR |= (MASK(LED_GREEN_PORTB10));
-						break;
-				case 7:
-						PTB->PDOR |= (MASK(LED_GREEN_PORTB11));
-						break;										
+	
+	
+				for (int i = 0; i < 4; i += 1) {
+					offAllGreenLED();	
+					PTC->PDOR |= (green_led_pos[i]);
+					
+					osDelay(50);
+					
+					
 				}
-				osDelay(50);
 				
-				if (running_green_LED_pos == 7) {
-						running_green_LED_pos = 0;
-				} else {
-						running_green_LED_pos++;
+				for (int i = 0; i < 4; i += 1) {
+					offAllGreenLED();
+					PTB->PDOR |= (green_led_pos2[i]);
+	
+					osDelay(50);
 				}
+	
+//				switch (running_green_LED_pos) {
+//				case 0:
+//						PTC->PDOR |= (MASK(LED_GREEN_PORTC8));
+//						break;
+//				case 1:
+//						PTC->PDOR |= (MASK(LED_GREEN_PORTC9));
+//						break;
+//				case 2:
+//						PTC->PDOR |= (MASK(LED_GREEN_PORTC10));
+//						break;
+//				case 3:
+//						PTC->PDOR |= (MASK(LED_GREEN_PORTC11));
+//						break;
+//				case 4:
+//						PTB->PDOR |= (MASK(LED_GREEN_PORTB8));
+//						break;
+//				case 5:
+//						PTB->PDOR |= (MASK(LED_GREEN_PORTB9));
+//						break;			
+//				case 6:
+//						PTB->PDOR |= (MASK(LED_GREEN_PORTB10));
+//						break;
+//				case 7:
+//						PTB->PDOR |= (MASK(LED_GREEN_PORTB11));
+//						running_green_LED_pos = -1;
+//						break;										
+//				}
+//				running_green_LED_pos+= 1;
+				
+//				osDelay(50);
+				
+				//if (running_green_LED_pos == 7) {
+				//		running_green_LED_pos = 0;
+				//} else {
+				//		running_green_LED_pos++;
+				//}
 		//}
 }
 
-void tStationaryGreenLED (void *argument) {
+void tStationaryGreenLED () {
 		//for (;;) {
-				onAllGreenLED();			
+	onAllGreenLED();			
 		//}
-}
+}	
+
