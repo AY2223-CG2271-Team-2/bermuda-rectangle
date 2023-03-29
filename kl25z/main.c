@@ -9,11 +9,14 @@
 #include "constants.h"
 #include "data_packet.h"
 #include "init.h"
+#include "ledControl.h"
 #include "motor.h"
 #include "music.h"
-#include "ledControl.h"
+#include <stdbool.h>
 
-// osMessageQueueId_t audioQ, motorQ, backLedRedQ, frontLedGreenQ;
+osSemaphoreId_t audioSemaphore, ledSemaphore;
+osMessageQueueId_t controlQ, audioQ, motorQ, ledQ, backLedRedQ, frontLedGreenQ;
+data_packet_t global_packet;
 
 /*----------------------------------------------------------------------------
  * Application main thread
@@ -24,51 +27,100 @@ void app_main(void *argument) {
   }
 }
 
-void motor_control_thread(void *argument) {
-  data_packet_t _data;
+void tMotor(void *argument) {
+  data_packet_t _packet;
 
-  _data.cmd = VROOM_VROOM;
-  _data.data = STOP_MOVE;
+  osStatus_t _debug;
 
   for (;;) {
+    _debug = osMessageQueueGet(motorQ, &_packet, NULL, osWaitForever);
+    if (_packet.data == RIGHT_MOVE) {
+      moveright();
+    } else if (_packet.data == LEFT_MOVE) {
+      moveleft();
+    } else if (_packet.data == FORWARD_MOVE) {
+      //Led_control_On(RED_LED);
+      moveforward();
+    } else if (_packet.data == STOP_MOVE) {
+      //Led_control_Off(RED_LED);
+      movestop();
+    } else if (_packet.data == BACK_MOVE) {
+      movebackward();
+    } else if (_packet.data == FORWARD_RIGHT_MOVE) {
+      //Led_control_On(RED_LED);
+      moveforwardright();
+    } else if (_packet.data == FORWARD_LEFT_MOVE) {
+      //Led_control_On(RED_LED);
+      moveforwardleft();
+    } else if (_packet.data == BACK_LEFT_MOVE) {
+      //Led_control_On(RED_LED);
+      movebackwardleft();
+    } else if (_packet.data == BACK_RIGHT_MOVE) {
+      //Led_control_On(RED_LED);
+      movebackwardright();
+    }
   }
 }
 
-void audio_thread(void *argument) {
+void tAudio(void *argument) {
   // ...
+  data_packet_t _packet;
+
   for (;;) {
+
+    //if (_packet.data != END_MOVE) {
+    //  astronomia(audioQ, audioSemaphore);
+    //} else {
+    //  // FIXME: Switch of audio issue
+    //  osSemaphoreAcquire(audioSemaphore, osWaitForever);
+    //  playEndingMusic();
+    //}
+		
+		if (!isEndMove()) {
+			astronomia(audioQ, audioSemaphore);
+		} else {
+			//osSemaphoreAcquire(audioSemaphore, osWaitForever);
+			playEndingMusic();
+		}
+	}
+}
+
+void tLED(void *argument) {
+  data_packet_t _packet;
+	
+	tStationaryGreenLED();
+	tStationaryRedLED();
+  for (;;) {
+    //tMovingGreenLED();
+    //tMovingRedLED();
+		
+		osMessageQueueGet(ledQ, &_packet, NULL, 0);
+		
+		
+		if ((_packet.data == STOP_MOVE) || (_packet.data == END_MOVE) || (_packet.data == INITIALISE)) {
+			tStationaryGreenLED(ledQ, ledSemaphore);
+      tStationaryRedLED(ledQ, ledSemaphore);
+		} else {
+			tMovingGreenLED(ledQ, ledSemaphore);
+			tMovingRedLED(ledQ, ledSemaphore);
+		}			
+		
+//		else {
+//			tMovingGreenLED();
+//      tMovingRedLED();
+//		}	
+    
   }
 }
 
-void motor_thread(void *argument) {
-	  for (;;) {
-			if (rx_data == RIGHT_MOVE) {
-				moveright();
-			} else if (rx_data == LEFT_MOVE) {
-				moveleft();
-			} else if (rx_data == FORWARD_MOVE) {
-				Led_control_On(RED_LED);
-				moveforward();
-			} else if (rx_data == STOP_MOVE) {
-				Led_control_Off(RED_LED);
-				movestop();
-			} else if (rx_data == BACK_MOVE) {
-				movebackward();
-			} else if (rx_data == FORWARD_RIGHT_MOVE) {
-				Led_control_On(RED_LED);
-				moveforwardright();
-			} else if (rx_data == FORWARD_LEFT_MOVE) {
-				Led_control_On(RED_LED);
-				moveforwardleft();
-			} else if (rx_data == BACK_LEFT_MOVE) {
-				Led_control_On(RED_LED);
-				movebackwardleft();
-			} else if (rx_data == BACK_RIGHT_MOVE) {
-				Led_control_On(RED_LED);
-				movebackwardright();
-			}
-		}
+void tControl(void *argument) {
+  for (;;) {
+    osMessageQueueGet(controlQ, &global_packet, NULL, osWaitForever);
+    osMessageQueuePut(motorQ, &global_packet, NULL, 0);
+    osMessageQueuePut(audioQ, &global_packet, NULL, 0);
+    osMessageQueuePut(ledQ, &global_packet, NULL, 0);
   }
+}
 
 int main(void) {
   // System Initialization
@@ -76,50 +128,23 @@ int main(void) {
   InitGPIO();
   initUART2(BAUD_RATE);
   initPWM();
-	initRedLED();
-	initGreenLED();
-  // ...
+  initRedLED();
+  initGreenLED();
+
+  // Init Queue
+  controlQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
+  audioQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
+  motorQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
+  //backLedRedQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
+  //frontLedGreenQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
+  ledQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
 
   osKernelInitialize();  // Initialize CMSIS-RTOS
-  osThreadNew(tMovingGreenLED, NULL, NULL); 
-	osThreadNew(tStationaryRedLED, NULL, NULL);
-	osThreadNew(astronomia, NULL, NULL);
-	osThreadNew(motor_thread, NULL, NULL);
+  audioSemaphore = osThreadNew(tControl, NULL, NULL);
+  osThreadNew(tMotor, NULL, NULL);
+  osThreadNew(tAudio, NULL, NULL);
+  osThreadNew(tLED, NULL, NULL);
   osKernelStart();  // Start thread execution
-  for (;;) {}
-
-//  // Speaker
-//  TPM1_C0V = 3750;
-  // Speaker
-  TPM1_C0V = 3750;
-
-  while (1) {
-		//playStarWars();
-		playEndingMusic();
-//    if (rx_data == RIGHT_MOVE) {
-//      moveright();
-//    } else if (rx_data == LEFT_MOVE) {
-//      moveleft();
-//    } else if (rx_data == FORWARD_MOVE) {
-//      Led_control_On(RED_LED);
-//      moveforward();
-//    } else if (rx_data == STOP_MOVE) {
-//      Led_control_Off(RED_LED);
-//      movestop();
-//    } else if (rx_data == BACK_MOVE) {
-//      movebackward();
-//    } else if (rx_data == FORWARD_RIGHT_MOVE) {
-//      Led_control_On(RED_LED);
-//      moveforwardright();
-//    } else if (rx_data == FORWARD_LEFT_MOVE) {
-//      Led_control_On(RED_LED);
-//      moveforwardleft();
-//    } else if (rx_data == BACK_LEFT_MOVE) {
-//      Led_control_On(RED_LED);
-//      movebackwardleft();
-//    } else if (rx_data == BACK_RIGHT_MOVE) {
-//      Led_control_On(RED_LED);
-//      movebackwardright();
-//    }
+  for (;;) {
   }
 }

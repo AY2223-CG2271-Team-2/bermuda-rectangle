@@ -50,6 +50,7 @@
 #define VROOM_VROOM 0x00
 
 // Data
+#define INITIALISE 0x00
 #define FORWARD_MOVE 0x01
 #define FORWARD_LEFT_MOVE 0x02
 #define FORWARD_RIGHT_MOVE 0x03
@@ -60,7 +61,11 @@
 #define BACK_RIGHT_MOVE 0x08
 #define STOP_MOVE 0x09
 
+#define END_MOVE 0x0A
+
 //****** Others ******//
+
+#define MSG_COUNT 1
 
 #define LED_RED 2  // 0b00000010
 #define FUNCTION_MASK(x) (x & 0xF0)

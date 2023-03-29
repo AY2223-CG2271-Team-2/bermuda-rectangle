@@ -7,10 +7,13 @@
 #include "init.h"
 #include "music.h"
 
+#define SPEED 0xFFFF
+#define TURN_SPEED 0xBBBB
+
 void moveforward(int _pwm) {
-  TPM0_C1V = 0x0EA6;
+  TPM0_C1V = SPEED;
   TPM0_C0V = 0;
-  TPM0_C3V = 0x0EA6;
+  TPM0_C3V = SPEED;
   TPM0_C2V = 0;
 }
 
@@ -23,85 +26,85 @@ void movestop(int _pwm) {
 
 void movebackward(int _pwm) {
   TPM0_C1V = 0;
-  TPM0_C0V = 0x0EA6;
+  TPM0_C0V = SPEED;
   TPM0_C3V = 0;
-  TPM0_C2V = 0x0EA6;
+  TPM0_C2V = SPEED;
 }
 
 void moveright(int _pwm) {
-  TPM0_C1V = 0x0EA6;
+  TPM0_C1V = SPEED;
   TPM0_C0V = 0;
   TPM0_C3V = 0;
-  TPM0_C2V = 0x0EA6;
-  delay(0x1000);
+  TPM0_C2V = SPEED;
+  osDelay(50);
   TPM0_C1V = 0;
   TPM0_C0V = 0;
   TPM0_C3V = 0;
   TPM0_C2V = 0;
-  delay(0x1000);
+  osDelay(50);
 }
 
 void moveleft(int _pwm) {
   TPM0_C1V = 0;
-  TPM0_C0V = 0x0EA6;
-  TPM0_C3V = 0x0EA6;
+  TPM0_C0V = SPEED;
+  TPM0_C3V = SPEED;
   TPM0_C2V = 0;
-  delay(0x1000);
+	osDelay(50);
   TPM0_C1V = 0;
   TPM0_C0V = 0;
   TPM0_C3V = 0;
   TPM0_C2V = 0;
-  delay(0x1000);
+  osDelay(50);
 }
 
 void moveforwardright(int _pwm) {
-  TPM0_C1V = 0x0EA6;
+  TPM0_C1V = SPEED;
   TPM0_C0V = 0;
-  TPM0_C3V = 0x0EA6;
+  TPM0_C3V = SPEED;
   TPM0_C2V = 0;
-  delay(0x1000);
-  TPM0_C1V = 0x0EA6;
+  osDelay(50);
+  TPM0_C1V = SPEED;
   TPM0_C0V = 0;
   TPM0_C3V = 0;
   TPM0_C2V = 0;
-  delay(0x1000);
+  osDelay(25);
 }
 
 void moveforwardleft(int _pwm) {
-  TPM0_C1V = 0x0EA6;
+  TPM0_C1V = SPEED;
   TPM0_C0V = 0;
-  TPM0_C3V = 0x0EA6;
+  TPM0_C3V = SPEED;
   TPM0_C2V = 0;
-  delay(0x1000);
+  osDelay(25);
   TPM0_C1V = 0;
   TPM0_C0V = 0;
-  TPM0_C3V = 0x0EA6;
+  TPM0_C3V = SPEED;
   TPM0_C2V = 0;
-  delay(0x1000);
+  osDelay(25);
 }
 
 void movebackwardright(int _pwm) {
   TPM0_C1V = 0;
-  TPM0_C0V = 0x0EA6;
+  TPM0_C0V = SPEED;
   TPM0_C3V = 0;
-  TPM0_C2V = 0x0EA6;
-  delay(0x1000);
+  TPM0_C2V = SPEED;
+  osDelay(25);
   TPM0_C1V = 0;
   TPM0_C0V = 0;
   TPM0_C3V = 0;
-  TPM0_C2V = 0x0EA6;
-  delay(0x1000);
+  TPM0_C2V = SPEED;
+  osDelay(25);
 }
 
 void movebackwardleft(int _pwm) {
   TPM0_C1V = 0;
-  TPM0_C0V = 0x0EA6;
+  TPM0_C0V = SPEED;
   TPM0_C3V = 0;
-  TPM0_C2V = 0x0EA6;
-  delay(0x1000);
+  TPM0_C2V = SPEED;
+  osDelay(25);
   TPM0_C1V = 0;
-  TPM0_C0V = 0x0EA6;
+  TPM0_C0V = SPEED;
   TPM0_C3V = 0;
   TPM0_C2V = 0;
-  delay(0x1000);
+  osDelay(25);
 }

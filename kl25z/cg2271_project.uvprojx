@@ -388,14 +388,14 @@
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
-              <FileName>UART.h</FileName>
+              <FileName>uart.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\UART.h</FilePath>
+              <FilePath>.\uart.h</FilePath>
             </File>
             <File>
-              <FileName>UART.c</FileName>
+              <FileName>uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\UART.c</FilePath>
+              <FilePath>.\uart.c</FilePath>
             </File>
             <File>
               <FileName>music.h</FileName>

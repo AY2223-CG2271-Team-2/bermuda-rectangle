@@ -10,8 +10,8 @@ static void delay(volatile uint32_t nof) {
   }
 }
 
-void delay_mult100(volatile uint32_t nof) {
-  for(int i=0;i<100;i++) {
+void delay_mult40(volatile uint32_t nof) {
+  for(int i=0;i<40;i++) {
     delay(nof);
   }
 }
@@ -97,6 +97,9 @@ void initPWM(void)
   //Enable PWM on TPM0 Channel 3 -> PTC4
   TPM0_C3SC &= ~((TPM_CnSC_ELSB_MASK) | (TPM_CnSC_ELSA_MASK) | (TPM_CnSC_MSB_MASK) | (TPM_CnSC_MSA_MASK));
   TPM0_C3SC |= (TPM_CnSC_ELSB(1) | TPM_CnSC_MSB(1));
+	
+	// Speaker
+  TPM1_C0V = 3750;
 	
 }
 
