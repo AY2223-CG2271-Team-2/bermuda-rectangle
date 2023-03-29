@@ -59,19 +59,6 @@ void initGreenLED (void) {
 		onAllGreenLED();
 }
 
-//void tLED (void *argument) {
-//		for (;;) {
-//				if (isMoving) {    // Rx value within MOVING COMMAND value range
-//						// Run tMovingRedLED thread/task
-//						// Run tMovingGreenLED thread/task
-//					
-//				}	else {
-//						// Run tStationaryRedLED thread/task
-//						// Run tStationaryGreenLED thread/task
-//				}					
-//		}
-//}
-
 void tMovingRedLED () {
 //		for (;;) {
 			PTA->PTOR |= MASK(LED_RED_PORTA1);
@@ -87,21 +74,12 @@ void tStationaryRedLED () {
 //		}
 }
 
-void tMovingGreenLED () {
-		
-		//for (;;) {
-				//offAllGreenLED();
-				// Running Green LED (Position 0 - 7 from left to right)
-				// To be edited based on hardware
-	
-	
+void tMovingGreenLED () {	
 				for (int i = 0; i < 4; i += 1) {
 					offAllGreenLED();	
 					PTC->PDOR |= (green_led_pos[i]);
 					
 					osDelay(50);
-					
-					
 				}
 				
 				for (int i = 0; i < 4; i += 1) {
@@ -110,49 +88,9 @@ void tMovingGreenLED () {
 	
 					osDelay(50);
 				}
-	
-//				switch (running_green_LED_pos) {
-//				case 0:
-//						PTC->PDOR |= (MASK(LED_GREEN_PORTC8));
-//						break;
-//				case 1:
-//						PTC->PDOR |= (MASK(LED_GREEN_PORTC9));
-//						break;
-//				case 2:
-//						PTC->PDOR |= (MASK(LED_GREEN_PORTC10));
-//						break;
-//				case 3:
-//						PTC->PDOR |= (MASK(LED_GREEN_PORTC11));
-//						break;
-//				case 4:
-//						PTB->PDOR |= (MASK(LED_GREEN_PORTB8));
-//						break;
-//				case 5:
-//						PTB->PDOR |= (MASK(LED_GREEN_PORTB9));
-//						break;			
-//				case 6:
-//						PTB->PDOR |= (MASK(LED_GREEN_PORTB10));
-//						break;
-//				case 7:
-//						PTB->PDOR |= (MASK(LED_GREEN_PORTB11));
-//						running_green_LED_pos = -1;
-//						break;										
-//				}
-//				running_green_LED_pos+= 1;
-				
-//				osDelay(50);
-				
-				//if (running_green_LED_pos == 7) {
-				//		running_green_LED_pos = 0;
-				//} else {
-				//		running_green_LED_pos++;
-				//}
-		//}
 }
 
 void tStationaryGreenLED () {
-		//for (;;) {
 	onAllGreenLED();			
-		//}
 }	
 
