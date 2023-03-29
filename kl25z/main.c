@@ -21,11 +21,6 @@ data_packet_t global_packet;
 /*----------------------------------------------------------------------------
  * Application main thread
  *---------------------------------------------------------------------------*/
-void app_main(void *argument) {
-  // ...
-  for (;;) {
-  }
-}
 
 void tMotor(void *argument) {
   data_packet_t _packet;
@@ -58,7 +53,9 @@ void tMotor(void *argument) {
     } else if (_packet.data == BACK_RIGHT_MOVE) {
       //Led_control_On(RED_LED);
       movebackwardright();
-    }
+    } else {
+			movestop();
+		}
   }
 }
 
@@ -67,19 +64,10 @@ void tAudio(void *argument) {
   data_packet_t _packet;
 
   for (;;) {
-
-    //if (_packet.data != END_MOVE) {
-    //  astronomia(audioQ, audioSemaphore);
-    //} else {
-    //  // FIXME: Switch of audio issue
-    //  osSemaphoreAcquire(audioSemaphore, osWaitForever);
-    //  playEndingMusic();
-    //}
 		
 		if (!isEndMove()) {
 			astronomia(audioQ, audioSemaphore);
 		} else {
-			//osSemaphoreAcquire(audioSemaphore, osWaitForever);
 			playEndingMusic();
 		}
 	}
@@ -91,11 +79,8 @@ void tLED(void *argument) {
 	tStationaryGreenLED();
 	tStationaryRedLED();
   for (;;) {
-    //tMovingGreenLED();
-    //tMovingRedLED();
 		
 		osMessageQueueGet(ledQ, &_packet, NULL, 0);
-		
 		
 		if ((_packet.data == STOP_MOVE) || (_packet.data == END_MOVE) || (_packet.data == INITIALISE)) {
 			tStationaryGreenLED(ledQ, ledSemaphore);
@@ -104,12 +89,6 @@ void tLED(void *argument) {
 			tMovingGreenLED(ledQ, ledSemaphore);
 			tMovingRedLED(ledQ, ledSemaphore);
 		}			
-		
-//		else {
-//			tMovingGreenLED();
-//      tMovingRedLED();
-//		}	
-    
   }
 }
 
@@ -135,8 +114,6 @@ int main(void) {
   controlQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
   audioQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
   motorQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
-  //backLedRedQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
-  //frontLedGreenQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
   ledQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
 
   osKernelInitialize();  // Initialize CMSIS-RTOS
