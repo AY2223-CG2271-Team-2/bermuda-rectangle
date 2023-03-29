@@ -80,14 +80,13 @@ void tLED(void *argument) {
 	tStationaryRedLED();
   for (;;) {
 		
-		osMessageQueueGet(ledQ, &_packet, NULL, 0);
 		
-		if ((_packet.data == STOP_MOVE) || (_packet.data == END_MOVE) || (_packet.data == INITIALISE)) {
-			tStationaryGreenLED(ledQ, ledSemaphore);
-      tStationaryRedLED(ledQ, ledSemaphore);
+		if ((global_packet.data == STOP_MOVE) || (global_packet.data == END_MOVE) || (global_packet.data == INITIALISE)) {
+			tStationaryGreenLED();
+      tStationaryRedLED();
 		} else {
-			tMovingGreenLED(ledQ, ledSemaphore);
-			tMovingRedLED(ledQ, ledSemaphore);
+			tMovingGreenLED(&global_packet);
+			tMovingRedLED();
 		}			
   }
 }
@@ -117,10 +116,10 @@ int main(void) {
   ledQ = osMessageQueueNew(MSG_COUNT, sizeof(data_packet_t), NULL);
 
   osKernelInitialize();  // Initialize CMSIS-RTOS
-  audioSemaphore = osThreadNew(tControl, NULL, NULL);
+  osThreadNew(tControl, NULL, NULL);
   osThreadNew(tMotor, NULL, NULL);
-  osThreadNew(tAudio, NULL, NULL);
-  osThreadNew(tLED, NULL, NULL);
+  audioSemaphore = osThreadNew(tAudio, NULL, NULL);
+  ledSemaphore = osThreadNew(tLED, NULL, NULL);
   osKernelStart();  // Start thread execution
   for (;;) {
   }

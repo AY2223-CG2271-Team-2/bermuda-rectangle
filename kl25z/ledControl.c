@@ -10,6 +10,7 @@
 
 
 volatile int running_green_LED_pos = 0;
+data_packet_t _packet;
 
 int green_led_pos[4] = {MASK(LED_GREEN_PORTC8), MASK(LED_GREEN_PORTC9), MASK(LED_GREEN_PORTC10), MASK(LED_GREEN_PORTC11)};
 int green_led_pos2[4] = {MASK(LED_GREEN_PORTB8), MASK(LED_GREEN_PORTB9), MASK(LED_GREEN_PORTB10), MASK(LED_GREEN_PORTB11)};
@@ -63,34 +64,47 @@ void tMovingRedLED () {
 //		for (;;) {
 			PTA->PTOR |= MASK(LED_RED_PORTA1);
 			osDelay(LED_TOGGLE_INTERVAL_1HZ);
-		
 //		}
 }
 
 void tStationaryRedLED () {
-//		for (;;) {
+//		for (;;) 
 			PTA->PTOR |= MASK(LED_RED_PORTA1);
 			osDelay(LED_TOGGLE_INTERVAL_2HZ);
 //		}
+			
+			
 }
 
-void tMovingGreenLED () {	
+void tMovingGreenLED (data_packet_t *packet) {	
 				for (int i = 0; i < 4; i += 1) {
 					offAllGreenLED();	
 					PTC->PDOR |= (green_led_pos[i]);
-					
 					osDelay(50);
+					
+					if ((packet->data == STOP_MOVE) || (packet->data == END_MOVE)) {
+						return;
+					}
+					
+					
 				}
 				
 				for (int i = 0; i < 4; i += 1) {
 					offAllGreenLED();
 					PTB->PDOR |= (green_led_pos2[i]);
-	
+			
 					osDelay(50);
+					
+					if ((packet->data == STOP_MOVE) || (packet->data == END_MOVE)) {
+						return;
+					}
+					
 				}
+		
 }
 
 void tStationaryGreenLED () {
-	onAllGreenLED();			
+	onAllGreenLED();	
+	
 }	
 
